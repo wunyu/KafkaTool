@@ -7,11 +7,11 @@ using System;
 
 namespace KafkaTool.App
 {
-    public class KafkaApp : IKafkaApp
+    public class KafkaPublisher : IKafkaPublisher
     {
         private readonly AppSetting _appSetting;
 
-        public KafkaApp(IOptions<AppSetting> appSetting)
+        public KafkaPublisher(IOptions<AppSetting> appSetting)
         {
             _appSetting = appSetting.Value;
         }

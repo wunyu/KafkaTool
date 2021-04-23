@@ -2,7 +2,7 @@
 
 namespace KafkaTool.Interfaces
 {
-    public interface IKafkaApp
+    public interface IKafkaPublisher
     {
         string Publish(string msg, string topicName, EnvType env);
     }

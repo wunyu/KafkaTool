@@ -42,7 +42,7 @@ namespace KafkaTool
             this.Cmb_Env = new System.Windows.Forms.ComboBox();
             this.Gb_publish = new System.Windows.Forms.GroupBox();
             this.Lbl_Consume_Topic = new System.Windows.Forms.Label();
-            this.Txbx_Consune_Topic = new System.Windows.Forms.TextBox();
+            this.Txbx_Consume_Topic = new System.Windows.Forms.TextBox();
             this.Btn_Consume_Msg = new System.Windows.Forms.Button();
             this.Txbx_Consume_Result = new System.Windows.Forms.TextBox();
             this.Lbl_Consume_Result = new System.Windows.Forms.Label();
@@ -191,13 +191,13 @@ namespace KafkaTool
             this.Lbl_Consume_Topic.TabIndex = 13;
             this.Lbl_Consume_Topic.Text = "Topic:";
             // 
-            // Txbx_Consune_Topic
+            // Txbx_Consume_Topic
             // 
-            this.Txbx_Consune_Topic.Location = new System.Drawing.Point(701, 129);
-            this.Txbx_Consune_Topic.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Txbx_Consune_Topic.Name = "Txbx_Consune_Topic";
-            this.Txbx_Consune_Topic.Size = new System.Drawing.Size(464, 23);
-            this.Txbx_Consune_Topic.TabIndex = 13;
+            this.Txbx_Consume_Topic.Location = new System.Drawing.Point(701, 129);
+            this.Txbx_Consume_Topic.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Txbx_Consume_Topic.Name = "Txbx_Consume_Topic";
+            this.Txbx_Consume_Topic.Size = new System.Drawing.Size(464, 23);
+            this.Txbx_Consume_Topic.TabIndex = 16;
             // 
             // Btn_Consume_Msg
             // 
@@ -264,7 +264,7 @@ namespace KafkaTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1179, 658);
+            this.ClientSize = new System.Drawing.Size(1200, 658);
             this.Controls.Add(this.Lbl_Consume_GroupId);
             this.Controls.Add(this.Txbx_GroupId);
             this.Controls.Add(this.Btn_Stop_Consume);
@@ -272,7 +272,7 @@ namespace KafkaTool
             this.Controls.Add(this.Txbx_Consume_Result);
             this.Controls.Add(this.Btn_Consume_Msg);
             this.Controls.Add(this.Cmb_Env);
-            this.Controls.Add(this.Txbx_Consune_Topic);
+            this.Controls.Add(this.Txbx_Consume_Topic);
             this.Controls.Add(this.Lbl_Consume_Topic);
             this.Controls.Add(this.Gb_publish);
             this.Controls.Add(this.Lbl_Env);
@@ -302,7 +302,7 @@ namespace KafkaTool
         private System.Windows.Forms.ComboBox Cmb_Env;
         private System.Windows.Forms.GroupBox Gb_publish;
         private System.Windows.Forms.Label Lbl_Consume_Topic;
-        private System.Windows.Forms.TextBox Txbx_Consune_Topic;
+        private System.Windows.Forms.TextBox Txbx_Consume_Topic;
         private System.Windows.Forms.Button Btn_Consume_Msg;
         private System.Windows.Forms.TextBox Txbx_Consume_Result;
         private System.Windows.Forms.Label Lbl_Consume_Result;

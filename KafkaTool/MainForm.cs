@@ -1,6 +1,4 @@
-﻿using Confluent.Kafka;
-using KafkaTool.App;
-using KafkaTool.Entities;
+﻿using KafkaTool.Entities;
 using KafkaTool.Interfaces;
 using System;
 using System.Drawing;
@@ -12,13 +10,13 @@ namespace KafkaTool
 {
     public partial class MainForm : Form
     {
-        private readonly IKafkaApp _kafkaApp;
+        private readonly IKafkaPublisher _kafkaPublisher;
         private readonly IKafkaConsumer _kafkaConsumer;
-        private delegate void test(object sender, ConsumerEventArgs e);
+        private delegate void ReceivedMsg(object sender, ConsumerEventArgs e);
 
-        public MainForm(IKafkaApp kafkaApp, IKafkaConsumer kafkaConsumer)
+        public MainForm(IKafkaPublisher kafkaApp, IKafkaConsumer kafkaConsumer)
         {
-            _kafkaApp = kafkaApp;
+            _kafkaPublisher = kafkaApp;
             _kafkaConsumer = kafkaConsumer;
             InitializeComponent();
         }
@@ -44,7 +42,7 @@ namespace KafkaTool
             using (StreamReader r = new StreamReader(filePath))
             {
                 string json = r.ReadToEnd();
-                pushReuslt = _kafkaApp.Publish(json, kafkaTopic, env);
+                pushReuslt = _kafkaPublisher.Publish(json, kafkaTopic, env);
             }
 
             Txbx_Publish_Result.Text = pushReuslt + Txbx_Publish_Result.Text;
@@ -78,8 +76,8 @@ namespace KafkaTool
         private void Btn_Consume_Msg_Click(object sender, EventArgs e)
         {
             Btn_Consume_Msg.Enabled = false;
-            _kafkaConsumer.ThresholdReached += c_ThresholdReached;
-            string topic = Txbx_Consune_Topic.Text;
+            _kafkaConsumer.ThresholdReached += OnReceiveMsg;
+            string topic = Txbx_Consume_Topic.Text;
             string groupId = Txbx_GroupId.Text;
             EnvType env = GetEnvType(Cmb_Env.Text);
 
@@ -103,14 +101,14 @@ namespace KafkaTool
             }
         }
 
-        private void c_ThresholdReached(object sender, ConsumerEventArgs e)
+        private void OnReceiveMsg(object sender, ConsumerEventArgs e)
         {
             string msg = $"{Environment.NewLine}{e.Message}{Txbx_Consume_Result.Text}";
 
             if (Txbx_Consume_Result.InvokeRequired)
             {
-                var d = new test(c_ThresholdReached);
-                Txbx_Consume_Result.Invoke(d, new object[] { sender, new ConsumerEventArgs() { Message = msg } });
+                var onReceiveMsg = new ReceivedMsg(OnReceiveMsg);
+                Txbx_Consume_Result.Invoke(onReceiveMsg, new object[] { sender, new ConsumerEventArgs() { Message = msg } });
             }
             else
             {
