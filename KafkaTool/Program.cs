@@ -36,6 +36,7 @@ namespace KafkaTool
                 {
                     services.Configure<AppSetting>(hostContext.Configuration);
                     services.AddTransient<IKafkaApp, KafkaApp>();
+                    services.AddTransient<IKafkaConsumer, KafkaConsumer>();
                     services.AddSingleton<MainForm>();
                 });
 

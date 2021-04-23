@@ -1,8 +1,11 @@
-﻿using KafkaTool.Entities;
+﻿using Confluent.Kafka;
+using KafkaTool.App;
+using KafkaTool.Entities;
 using KafkaTool.Interfaces;
 using System;
 using System.Drawing;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace KafkaTool
@@ -10,16 +13,19 @@ namespace KafkaTool
     public partial class MainForm : Form
     {
         private readonly IKafkaApp _kafkaApp;
+        private readonly IKafkaConsumer _kafkaConsumer;
+        private delegate void test(object sender, ConsumerEventArgs e);
 
-        public MainForm(IKafkaApp kafkaApp)
+        public MainForm(IKafkaApp kafkaApp, IKafkaConsumer kafkaConsumer)
         {
             _kafkaApp = kafkaApp;
+            _kafkaConsumer = kafkaConsumer;
             InitializeComponent();
         }
         private void Btn_Push_Massage_Click(object sender, EventArgs e)
         {
             string filePath = Txbx_File_Path.Text;
-            string kafkaTopic = Txbx_Kafka_Topic.Text;
+            string kafkaTopic = Txbx_Publish_Topic.Text;
             string pushReuslt = "";
             EnvType env = GetEnvType(Cmb_Env.Text);
 
@@ -41,12 +47,12 @@ namespace KafkaTool
                 pushReuslt = _kafkaApp.Publish(json, kafkaTopic, env);
             }
 
-            Txbx_Result.Text = pushReuslt + Txbx_Result.Text;
+            Txbx_Publish_Result.Text = pushReuslt + Txbx_Publish_Result.Text;
         }
 
         private void Btn_Clear_Result_Message_Click(object sender, EventArgs e)
         {
-            Txbx_Result.Text = "";
+            Txbx_Publish_Result.Text = "";
         }
 
         private void Txbx_File_Path_Leave(object sender, EventArgs e)
@@ -69,6 +75,18 @@ namespace KafkaTool
             Txbx_File_Path.Text = defaultFilePath;
         }
 
+        private void Btn_Consume_Msg_Click(object sender, EventArgs e)
+        {
+            Btn_Consume_Msg.Enabled = false;
+            _kafkaConsumer.ThresholdReached += c_ThresholdReached;
+            string topic = Txbx_Consune_Topic.Text;
+            string groupId = Txbx_GroupId.Text;
+            EnvType env = GetEnvType(Cmb_Env.Text);
+
+            Thread consumerTread = new Thread(() => _kafkaConsumer.Consume(topic, groupId, env));
+            consumerTread.Start();
+        }
+
         private EnvType GetEnvType(string env)
         {
             if (env.Contains("DEV"))
@@ -85,5 +103,24 @@ namespace KafkaTool
             }
         }
 
+        private void c_ThresholdReached(object sender, ConsumerEventArgs e)
+        {
+            string msg = $"{Environment.NewLine}{e.Message}{Txbx_Consume_Result.Text}";
+
+            if (Txbx_Consume_Result.InvokeRequired)
+            {
+                var d = new test(c_ThresholdReached);
+                Txbx_Consume_Result.Invoke(d, new object[] { sender, new ConsumerEventArgs() { Message = msg } });
+            }
+            else
+            {
+                Txbx_Consume_Result.Text = e.Message;
+            }
+        }
+
+        private void Btn_Stop_Consume_Click(object sender, EventArgs e)
+        {
+            Btn_Consume_Msg.Enabled = true;
+        }
     }
 }
