@@ -4,6 +4,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace KafkaTool
@@ -12,7 +13,8 @@ namespace KafkaTool
     {
         private readonly IKafkaPublisher _kafkaPublisher;
         private readonly IKafkaConsumer _kafkaConsumer;
-        private delegate void ReceivedMsg(object sender, ConsumerEventArgs e);
+        private CancellationTokenSource _consumerCts;
+        private delegate void ConsumerReceivedMsg(object sender, ConsumerEventArgs e);
 
         public MainForm(IKafkaPublisher kafkaApp, IKafkaConsumer kafkaConsumer)
         {
@@ -20,6 +22,7 @@ namespace KafkaTool
             _kafkaConsumer = kafkaConsumer;
             InitializeComponent();
         }
+
         private void Btn_Push_Massage_Click(object sender, EventArgs e)
         {
             string filePath = Txbx_File_Path.Text;
@@ -75,14 +78,52 @@ namespace KafkaTool
 
         private void Btn_Consume_Msg_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(Txbx_Consume_Topic.Text))
+            {
+                MessageBox.Show("Hi, your kafka consumer topic is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Txbx_GroupId.Text))
+            {
+                MessageBox.Show("Hi, your kafka consumer group id is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Btn_Consume_Msg.Text = "Consuming...";
             Btn_Consume_Msg.Enabled = false;
-            _kafkaConsumer.ThresholdReached += OnReceiveMsg;
+            Txbx_GroupId.Enabled = false;
+            Txbx_Consume_Topic.Enabled = false;
+            _ = Consume();
+        }
+
+        private async Task Consume()
+        {
+            _kafkaConsumer.ThresholdReached += OnConsumerReceiveMsg;
+            _consumerCts = new CancellationTokenSource();
             string topic = Txbx_Consume_Topic.Text;
             string groupId = Txbx_GroupId.Text;
             EnvType env = GetEnvType(Cmb_Env.Text);
 
-            Thread consumerTread = new Thread(() => _kafkaConsumer.Consume(topic, groupId, env));
-            consumerTread.Start();
+            var t = Task.Run(() => _kafkaConsumer.Consume(topic, groupId, env, _consumerCts.Token), _consumerCts.Token);
+
+            try
+            {
+                await t;
+            }
+            catch (OperationCanceledException e)
+            {
+                Txbx_Consume_Result.Text = $"{nameof(OperationCanceledException)} thrown with message {e.Message}{Environment.NewLine}{Txbx_Consume_Result.Text}";
+            }
+            finally
+            {
+                _consumerCts.Dispose();
+                _kafkaConsumer.ThresholdReached -= OnConsumerReceiveMsg;
+                Btn_Consume_Msg.Text = "Consume Message";
+                Btn_Consume_Msg.Enabled = true;
+                Txbx_GroupId.Enabled = true;
+                Txbx_Consume_Topic.Enabled = true;
+            }
         }
 
         private EnvType GetEnvType(string env)
@@ -101,13 +142,13 @@ namespace KafkaTool
             }
         }
 
-        private void OnReceiveMsg(object sender, ConsumerEventArgs e)
+        private void OnConsumerReceiveMsg(object sender, ConsumerEventArgs e)
         {
             string msg = $"{Environment.NewLine}{e.Message}{Txbx_Consume_Result.Text}";
 
             if (Txbx_Consume_Result.InvokeRequired)
             {
-                var onReceiveMsg = new ReceivedMsg(OnReceiveMsg);
+                var onReceiveMsg = new ConsumerReceivedMsg(OnConsumerReceiveMsg);
                 Txbx_Consume_Result.Invoke(onReceiveMsg, new object[] { sender, new ConsumerEventArgs() { Message = msg } });
             }
             else
@@ -118,7 +159,13 @@ namespace KafkaTool
 
         private void Btn_Stop_Consume_Click(object sender, EventArgs e)
         {
-            Btn_Consume_Msg.Enabled = true;
+            if(_consumerCts != null)
+                _consumerCts.Cancel();
+        }
+
+        private void Btn_Clear_Consumer_Result_Message_Click(object sender, EventArgs e)
+        {
+            Txbx_Consume_Result.Text = "";
         }
     }
 }

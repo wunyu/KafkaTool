@@ -18,7 +18,7 @@ namespace KafkaTool.App
             _appSetting = appSetting?.Value;
         }
 
-        public void Consume(string topic, string groupId, EnvType env)
+        public void Consume(string topic, string groupId, EnvType env, CancellationToken ct)
         {
             string broker = "";
             string devBroker = _appSetting.KafkaSetting.Brokers.Dev;
@@ -48,62 +48,55 @@ namespace KafkaTool.App
                 EnablePartitionEof = true
             };
 
-            var cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (_, e) => {
-                e.Cancel = true;
-                cts.Cancel();
-            };
-
-            while (true)
+            using (var consumer = new ConsumerBuilder<Ignore, string>(config)
+            .SetErrorHandler((_, e) => errorMsg += $"NotifierService error: {e.Reason}")
+            .Build())
             {
-                using (var consumer = new ConsumerBuilder<Ignore, string>(config)
-                .SetErrorHandler((_, e) => errorMsg += $"NotifierService error: {e.Reason}")
-                .Build())
+                consumer.Subscribe(topic);
+                //consumer.Assign(new TopicPartition(topic, 0));
+
+                try
                 {
-                    consumer.Subscribe(topic);
-                    //consumer.Assign(new TopicPartition(topic, 0));
-
-                    try
+                    while (true)
                     {
-                        while (true)
+                        var consumeResult = consumer.Consume(ct);
+                        try
                         {
-                            var consumeResult = consumer.Consume(cts.Token);
-                            try
-                            {
-                                if (consumeResult.IsPartitionEOF)
-                                    continue;
-                                
-                                consumeMsg = consumeResult.Message.Timestamp.UtcDateTime.ToString() + ": " + consumeResult.Message.Value;
-                                Console.WriteLine(consumeMsg);
+                            if (consumeResult.IsPartitionEOF)
+                                continue;
 
-                                ConsumerEventArgs args = new ConsumerEventArgs() { Message = consumeMsg };
+                            consumeMsg = consumeResult.Message.Timestamp.UtcDateTime.ToString() + ": " + consumeResult.Message.Value;
+                            Console.WriteLine(consumeMsg);
 
-                                OnThresholdReached(args);
-                                //consumer.Commit(consumeResult);
-                            }
-                            catch (ConsumeException e)
-                            {
-                                consumer.Commit(consumeResult);
-                                errorMsg += $"ConsumeException error: {e.Message}";
-                            }
+                            ConsumerEventArgs args = new ConsumerEventArgs() { Message = consumeMsg };
 
+                            OnThresholdReached(args);
+                            consumer.Commit(consumeResult);
                         }
-
+                        catch (ConsumeException e)
+                        {
+                            consumer.Commit(consumeResult);
+                            errorMsg += $"ConsumeException error: {e.Message}";
+                            ConsumerEventArgs args = new ConsumerEventArgs() { Message = errorMsg };
+                            OnThresholdReached(args);
+                        }
                     }
-                    catch (OperationCanceledException ex)
-                    {
-                        errorMsg += $"OperationCanceledException: {ex.Message}";
-                        consumer.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        errorMsg += $"Exception: {ex.Message}";
-                        consumer.Close();
-                    }
-                    finally
-                    {
-                        errorMsg += $"Consumer stop.";
-                    }
+                }
+                catch (OperationCanceledException ex)
+                {
+                    errorMsg += $"OperationCanceledException: {ex.Message}";
+                    consumer.Close();
+                }
+                catch (Exception ex)
+                {
+                    errorMsg += $"Exception: {ex.Message}";
+                    consumer.Close();
+                }
+                finally
+                {
+                    errorMsg += $" Consumer stop.";
+                    ConsumerEventArgs args = new ConsumerEventArgs() { Message = errorMsg };
+                    OnThresholdReached(args);
                 }
             }
         }

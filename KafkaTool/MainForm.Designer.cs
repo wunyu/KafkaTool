@@ -35,12 +35,12 @@ namespace KafkaTool
             this.Lbl_File_Path = new System.Windows.Forms.Label();
             this.Txbx_Publish_Result = new System.Windows.Forms.TextBox();
             this.Lbl_Publish_Result = new System.Windows.Forms.Label();
-            this.Btn_Clear_Result_Message = new System.Windows.Forms.Button();
+            this.Btn_Clear_Publisher_Result_Message = new System.Windows.Forms.Button();
             this.Lbl_File_Status = new System.Windows.Forms.Label();
             this.Lbl_Publish_Topic = new System.Windows.Forms.Label();
             this.Txbx_Publish_Topic = new System.Windows.Forms.TextBox();
             this.Cmb_Env = new System.Windows.Forms.ComboBox();
-            this.Gb_publish = new System.Windows.Forms.GroupBox();
+            this.Gb_publisher = new System.Windows.Forms.GroupBox();
             this.Lbl_Consume_Topic = new System.Windows.Forms.Label();
             this.Txbx_Consume_Topic = new System.Windows.Forms.TextBox();
             this.Btn_Consume_Msg = new System.Windows.Forms.Button();
@@ -49,7 +49,10 @@ namespace KafkaTool
             this.Btn_Stop_Consume = new System.Windows.Forms.Button();
             this.Txbx_GroupId = new System.Windows.Forms.TextBox();
             this.Lbl_Consume_GroupId = new System.Windows.Forms.Label();
-            this.Gb_publish.SuspendLayout();
+            this.Gb_Consumer = new System.Windows.Forms.GroupBox();
+            this.Btn_Clear_Consumer_Result_Message = new System.Windows.Forms.Button();
+            this.Gb_publisher.SuspendLayout();
+            this.Gb_Consumer.SuspendLayout();
             this.SuspendLayout();
             // 
             // Btn_Push_Msg
@@ -113,16 +116,16 @@ namespace KafkaTool
             this.Lbl_Publish_Result.TabIndex = 7;
             this.Lbl_Publish_Result.Text = "Result:";
             // 
-            // Btn_Clear_Result_Message
+            // Btn_Clear_Publisher_Result_Message
             // 
-            this.Btn_Clear_Result_Message.Location = new System.Drawing.Point(396, 555);
-            this.Btn_Clear_Result_Message.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Btn_Clear_Result_Message.Name = "Btn_Clear_Result_Message";
-            this.Btn_Clear_Result_Message.Size = new System.Drawing.Size(174, 27);
-            this.Btn_Clear_Result_Message.TabIndex = 8;
-            this.Btn_Clear_Result_Message.Text = "Clear Result Message";
-            this.Btn_Clear_Result_Message.UseVisualStyleBackColor = true;
-            this.Btn_Clear_Result_Message.Click += new System.EventHandler(this.Btn_Clear_Result_Message_Click);
+            this.Btn_Clear_Publisher_Result_Message.Location = new System.Drawing.Point(396, 555);
+            this.Btn_Clear_Publisher_Result_Message.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Btn_Clear_Publisher_Result_Message.Name = "Btn_Clear_Publisher_Result_Message";
+            this.Btn_Clear_Publisher_Result_Message.Size = new System.Drawing.Size(174, 27);
+            this.Btn_Clear_Publisher_Result_Message.TabIndex = 8;
+            this.Btn_Clear_Publisher_Result_Message.Text = "Clear Result Message";
+            this.Btn_Clear_Publisher_Result_Message.UseVisualStyleBackColor = true;
+            this.Btn_Clear_Publisher_Result_Message.Click += new System.EventHandler(this.Btn_Clear_Result_Message_Click);
             // 
             // Lbl_File_Status
             // 
@@ -163,28 +166,28 @@ namespace KafkaTool
             this.Cmb_Env.Size = new System.Drawing.Size(140, 23);
             this.Cmb_Env.TabIndex = 12;
             // 
-            // Gb_publish
+            // Gb_publisher
             // 
-            this.Gb_publish.Controls.Add(this.Txbx_Publish_Topic);
-            this.Gb_publish.Controls.Add(this.Lbl_Publish_Topic);
-            this.Gb_publish.Controls.Add(this.Lbl_File_Status);
-            this.Gb_publish.Controls.Add(this.Btn_Clear_Result_Message);
-            this.Gb_publish.Controls.Add(this.Lbl_Publish_Result);
-            this.Gb_publish.Controls.Add(this.Txbx_Publish_Result);
-            this.Gb_publish.Controls.Add(this.Lbl_File_Path);
-            this.Gb_publish.Controls.Add(this.Txbx_File_Path);
-            this.Gb_publish.Controls.Add(this.Btn_Push_Msg);
-            this.Gb_publish.Location = new System.Drawing.Point(12, 50);
-            this.Gb_publish.Name = "Gb_publish";
-            this.Gb_publish.Size = new System.Drawing.Size(593, 596);
-            this.Gb_publish.TabIndex = 13;
-            this.Gb_publish.TabStop = false;
-            this.Gb_publish.Text = "Publisher";
+            this.Gb_publisher.Controls.Add(this.Txbx_Publish_Topic);
+            this.Gb_publisher.Controls.Add(this.Lbl_Publish_Topic);
+            this.Gb_publisher.Controls.Add(this.Lbl_File_Status);
+            this.Gb_publisher.Controls.Add(this.Btn_Clear_Publisher_Result_Message);
+            this.Gb_publisher.Controls.Add(this.Lbl_Publish_Result);
+            this.Gb_publisher.Controls.Add(this.Txbx_Publish_Result);
+            this.Gb_publisher.Controls.Add(this.Lbl_File_Path);
+            this.Gb_publisher.Controls.Add(this.Txbx_File_Path);
+            this.Gb_publisher.Controls.Add(this.Btn_Push_Msg);
+            this.Gb_publisher.Location = new System.Drawing.Point(12, 50);
+            this.Gb_publisher.Name = "Gb_publisher";
+            this.Gb_publisher.Size = new System.Drawing.Size(593, 596);
+            this.Gb_publisher.TabIndex = 13;
+            this.Gb_publisher.TabStop = false;
+            this.Gb_publisher.Text = "Publisher";
             // 
             // Lbl_Consume_Topic
             // 
             this.Lbl_Consume_Topic.AutoSize = true;
-            this.Lbl_Consume_Topic.Location = new System.Drawing.Point(637, 132);
+            this.Lbl_Consume_Topic.Location = new System.Drawing.Point(14, 91);
             this.Lbl_Consume_Topic.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Lbl_Consume_Topic.Name = "Lbl_Consume_Topic";
             this.Lbl_Consume_Topic.Size = new System.Drawing.Size(38, 15);
@@ -193,7 +196,7 @@ namespace KafkaTool
             // 
             // Txbx_Consume_Topic
             // 
-            this.Txbx_Consume_Topic.Location = new System.Drawing.Point(701, 129);
+            this.Txbx_Consume_Topic.Location = new System.Drawing.Point(78, 88);
             this.Txbx_Consume_Topic.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Txbx_Consume_Topic.Name = "Txbx_Consume_Topic";
             this.Txbx_Consume_Topic.Size = new System.Drawing.Size(464, 23);
@@ -201,7 +204,7 @@ namespace KafkaTool
             // 
             // Btn_Consume_Msg
             // 
-            this.Btn_Consume_Msg.Location = new System.Drawing.Point(634, 172);
+            this.Btn_Consume_Msg.Location = new System.Drawing.Point(11, 131);
             this.Btn_Consume_Msg.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Btn_Consume_Msg.Name = "Btn_Consume_Msg";
             this.Btn_Consume_Msg.Size = new System.Drawing.Size(256, 27);
@@ -212,19 +215,19 @@ namespace KafkaTool
             // 
             // Txbx_Consume_Result
             // 
-            this.Txbx_Consume_Result.Location = new System.Drawing.Point(634, 235);
+            this.Txbx_Consume_Result.Location = new System.Drawing.Point(11, 194);
             this.Txbx_Consume_Result.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Txbx_Consume_Result.Multiline = true;
             this.Txbx_Consume_Result.Name = "Txbx_Consume_Result";
             this.Txbx_Consume_Result.ReadOnly = true;
             this.Txbx_Consume_Result.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.Txbx_Consume_Result.Size = new System.Drawing.Size(552, 363);
+            this.Txbx_Consume_Result.Size = new System.Drawing.Size(552, 354);
             this.Txbx_Consume_Result.TabIndex = 12;
             // 
             // Lbl_Consume_Result
             // 
             this.Lbl_Consume_Result.AutoSize = true;
-            this.Lbl_Consume_Result.Location = new System.Drawing.Point(634, 217);
+            this.Lbl_Consume_Result.Location = new System.Drawing.Point(11, 176);
             this.Lbl_Consume_Result.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Lbl_Consume_Result.Name = "Lbl_Consume_Result";
             this.Lbl_Consume_Result.Size = new System.Drawing.Size(42, 15);
@@ -233,7 +236,7 @@ namespace KafkaTool
             // 
             // Btn_Stop_Consume
             // 
-            this.Btn_Stop_Consume.Location = new System.Drawing.Point(909, 172);
+            this.Btn_Stop_Consume.Location = new System.Drawing.Point(286, 131);
             this.Btn_Stop_Consume.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Btn_Stop_Consume.Name = "Btn_Stop_Consume";
             this.Btn_Stop_Consume.Size = new System.Drawing.Size(256, 27);
@@ -244,7 +247,7 @@ namespace KafkaTool
             // 
             // Txbx_GroupId
             // 
-            this.Txbx_GroupId.Location = new System.Drawing.Point(701, 80);
+            this.Txbx_GroupId.Location = new System.Drawing.Point(78, 39);
             this.Txbx_GroupId.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Txbx_GroupId.Name = "Txbx_GroupId";
             this.Txbx_GroupId.Size = new System.Drawing.Size(464, 23);
@@ -253,35 +256,59 @@ namespace KafkaTool
             // Lbl_Consume_GroupId
             // 
             this.Lbl_Consume_GroupId.AutoSize = true;
-            this.Lbl_Consume_GroupId.Location = new System.Drawing.Point(637, 83);
+            this.Lbl_Consume_GroupId.Location = new System.Drawing.Point(14, 42);
             this.Lbl_Consume_GroupId.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Lbl_Consume_GroupId.Name = "Lbl_Consume_GroupId";
             this.Lbl_Consume_GroupId.Size = new System.Drawing.Size(56, 15);
             this.Lbl_Consume_GroupId.TabIndex = 16;
             this.Lbl_Consume_GroupId.Text = "Group Id:";
             // 
+            // Gb_Consumer
+            // 
+            this.Gb_Consumer.Controls.Add(this.Btn_Clear_Consumer_Result_Message);
+            this.Gb_Consumer.Controls.Add(this.Lbl_Consume_GroupId);
+            this.Gb_Consumer.Controls.Add(this.Txbx_GroupId);
+            this.Gb_Consumer.Controls.Add(this.Btn_Stop_Consume);
+            this.Gb_Consumer.Controls.Add(this.Lbl_Consume_Result);
+            this.Gb_Consumer.Controls.Add(this.Txbx_Consume_Result);
+            this.Gb_Consumer.Controls.Add(this.Btn_Consume_Msg);
+            this.Gb_Consumer.Controls.Add(this.Txbx_Consume_Topic);
+            this.Gb_Consumer.Controls.Add(this.Lbl_Consume_Topic);
+            this.Gb_Consumer.Location = new System.Drawing.Point(623, 50);
+            this.Gb_Consumer.Name = "Gb_Consumer";
+            this.Gb_Consumer.Size = new System.Drawing.Size(575, 596);
+            this.Gb_Consumer.TabIndex = 17;
+            this.Gb_Consumer.TabStop = false;
+            this.Gb_Consumer.Text = "Consumer";
+            // 
+            // Btn_Clear_Consumer_Result_Message
+            // 
+            this.Btn_Clear_Consumer_Result_Message.Location = new System.Drawing.Point(389, 555);
+            this.Btn_Clear_Consumer_Result_Message.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Btn_Clear_Consumer_Result_Message.Name = "Btn_Clear_Consumer_Result_Message";
+            this.Btn_Clear_Consumer_Result_Message.Size = new System.Drawing.Size(174, 27);
+            this.Btn_Clear_Consumer_Result_Message.TabIndex = 12;
+            this.Btn_Clear_Consumer_Result_Message.Text = "Clear Result Message";
+            this.Btn_Clear_Consumer_Result_Message.UseVisualStyleBackColor = true;
+            this.Btn_Clear_Consumer_Result_Message.Click += new System.EventHandler(this.Btn_Clear_Consumer_Result_Message_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 658);
-            this.Controls.Add(this.Lbl_Consume_GroupId);
-            this.Controls.Add(this.Txbx_GroupId);
-            this.Controls.Add(this.Btn_Stop_Consume);
-            this.Controls.Add(this.Lbl_Consume_Result);
-            this.Controls.Add(this.Txbx_Consume_Result);
-            this.Controls.Add(this.Btn_Consume_Msg);
+            this.ClientSize = new System.Drawing.Size(1210, 658);
+            this.Controls.Add(this.Gb_Consumer);
             this.Controls.Add(this.Cmb_Env);
-            this.Controls.Add(this.Txbx_Consume_Topic);
-            this.Controls.Add(this.Lbl_Consume_Topic);
-            this.Controls.Add(this.Gb_publish);
+            this.Controls.Add(this.Gb_publisher);
             this.Controls.Add(this.Lbl_Env);
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "MainForm";
             this.Text = "MyKafkaTool";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.Gb_publish.ResumeLayout(false);
-            this.Gb_publish.PerformLayout();
+            this.Gb_publisher.ResumeLayout(false);
+            this.Gb_publisher.PerformLayout();
+            this.Gb_Consumer.ResumeLayout(false);
+            this.Gb_Consumer.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -295,12 +322,12 @@ namespace KafkaTool
         private System.Windows.Forms.Label Lbl_File_Path;
         private System.Windows.Forms.TextBox Txbx_Publish_Result;
         private System.Windows.Forms.Label Lbl_Publish_Result;
-        private System.Windows.Forms.Button Btn_Clear_Result_Message;
+        private System.Windows.Forms.Button Btn_Clear_Publisher_Result_Message;
         private System.Windows.Forms.Label Lbl_File_Status;
         private System.Windows.Forms.Label Lbl_Publish_Topic;
         private System.Windows.Forms.TextBox Txbx_Publish_Topic;
         private System.Windows.Forms.ComboBox Cmb_Env;
-        private System.Windows.Forms.GroupBox Gb_publish;
+        private System.Windows.Forms.GroupBox Gb_publisher;
         private System.Windows.Forms.Label Lbl_Consume_Topic;
         private System.Windows.Forms.TextBox Txbx_Consume_Topic;
         private System.Windows.Forms.Button Btn_Consume_Msg;
@@ -309,6 +336,8 @@ namespace KafkaTool
         private System.Windows.Forms.Button Btn_Stop_Consume;
         private System.Windows.Forms.TextBox Txbx_GroupId;
         private System.Windows.Forms.Label Lbl_Consume_GroupId;
+        private System.Windows.Forms.GroupBox Gb_Consumer;
+        private System.Windows.Forms.Button Btn_Clear_Consumer_Result_Message;
     }
 }
 
