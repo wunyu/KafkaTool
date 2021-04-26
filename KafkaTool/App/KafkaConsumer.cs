@@ -65,8 +65,10 @@ namespace KafkaTool.App
                             if (consumeResult.IsPartitionEOF)
                                 continue;
 
-                            consumeMsg = consumeResult.Message.Timestamp.UtcDateTime.ToString() + ": " + consumeResult.Message.Value;
-                            Console.WriteLine(consumeMsg);
+                            consumeMsg = $"Offset: {consumeResult.Offset}{Environment.NewLine}" +
+                                $"Time: {consumeResult.Message.Timestamp.UtcDateTime.ToString()}{Environment.NewLine}" +
+                                $"Msg: {consumeResult.Message.Value}{Environment.NewLine}" +
+                                $"{Environment.NewLine}";
 
                             ConsumerEventArgs args = new ConsumerEventArgs() { Message = consumeMsg };
 
