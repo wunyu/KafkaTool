@@ -70,7 +70,7 @@ namespace KafkaTool.App
 
                             ConsumerEventArgs args = new ConsumerEventArgs() { Message = consumeMsg };
 
-                            OnThresholdReached(args);
+                            OnReceivedMsg(args);
                             consumer.Commit(consumeResult);
                         }
                         catch (ConsumeException e)
@@ -78,7 +78,7 @@ namespace KafkaTool.App
                             consumer.Commit(consumeResult);
                             errorMsg += $"ConsumeException error: {e.Message}";
                             ConsumerEventArgs args = new ConsumerEventArgs() { Message = errorMsg };
-                            OnThresholdReached(args);
+                            OnReceivedMsg(args);
                         }
                     }
                 }
@@ -96,12 +96,12 @@ namespace KafkaTool.App
                 {
                     errorMsg += $" Consumer stop.";
                     ConsumerEventArgs args = new ConsumerEventArgs() { Message = errorMsg };
-                    OnThresholdReached(args);
+                    OnReceivedMsg(args);
                 }
             }
         }
 
-        protected virtual void OnThresholdReached(ConsumerEventArgs e)
+        protected virtual void OnReceivedMsg(ConsumerEventArgs e)
         {
             EventHandler<ConsumerEventArgs> handler = ThresholdReached;
             if (handler != null)
