@@ -11,7 +11,7 @@ namespace KafkaTool.App
     public class KafkaConsumer : IKafkaConsumer
     {
         private readonly AppSetting _appSetting;
-        public event EventHandler<ConsumerEventArgs> ThresholdReached;
+        public event EventHandler<ConsumerEventArgs> OnReceivedMsgHandler;
 
         public KafkaConsumer(IOptions<AppSetting> appSetting)
         {
@@ -105,7 +105,7 @@ namespace KafkaTool.App
 
         protected virtual void OnReceivedMsg(ConsumerEventArgs e)
         {
-            EventHandler<ConsumerEventArgs> handler = ThresholdReached;
+            EventHandler<ConsumerEventArgs> handler = OnReceivedMsgHandler;
             if (handler != null)
             {
                 handler(this, e);

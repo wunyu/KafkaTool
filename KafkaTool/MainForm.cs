@@ -99,7 +99,7 @@ namespace KafkaTool
 
         private async Task Consume()
         {
-            _kafkaConsumer.ThresholdReached += OnConsumerReceiveMsg;
+            _kafkaConsumer.OnReceivedMsgHandler += OnConsumerReceiveMsg;
             _consumerCts = new CancellationTokenSource();
             string topic = Txbx_Consume_Topic.Text;
             string groupId = Txbx_GroupId.Text;
@@ -118,7 +118,7 @@ namespace KafkaTool
             finally
             {
                 _consumerCts.Dispose();
-                _kafkaConsumer.ThresholdReached -= OnConsumerReceiveMsg;
+                _kafkaConsumer.OnReceivedMsgHandler -= OnConsumerReceiveMsg;
                 Btn_Consume_Msg.Text = "Consume Message";
                 Btn_Consume_Msg.Enabled = true;
                 Txbx_GroupId.Enabled = true;

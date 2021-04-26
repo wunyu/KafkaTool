@@ -6,7 +6,7 @@ namespace KafkaTool.Interfaces
 {
     public interface IKafkaConsumer
     {
-        event EventHandler<ConsumerEventArgs> ThresholdReached;
+        event EventHandler<ConsumerEventArgs> OnReceivedMsgHandler;
         void Consume(string topic, string groupId, EnvType env, CancellationToken ct);
     }
 }
